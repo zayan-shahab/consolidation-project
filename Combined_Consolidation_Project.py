@@ -46,10 +46,11 @@ def player_turn():
     """
     Manages a single player's turn in the dice game.
 
-    The player rolls three dice and decides whether to re-roll any dice
+    The player rolls three dice and decides whether to re-roll non-fixed dice
     or keep their current roll. The turn ends when the player chooses not
     to re-roll or certain conditions (like "TUPLE OUT") are met.
-    """
+    Returns player score
+      """
     dice = roll_dice()
     dice = list(dice)  
     score = 0
@@ -59,11 +60,28 @@ def player_turn():
             print("TUPLE OUT! You score 0 points.")
             break
 
-        if is_fixed(dice):
-            print("Fixed dice. Cannot re-roll.")
-            score += calculate_score(dice)
-            break
+        dice_counts = {value: dice.count(value) for value in set(dice)}
+        fixed_values = [value for value, count in dice_counts.items() if count > 1]
 
+        if fixed_values:
+            print(f"Fixed dice: {fixed_values}")
+            print(f"Current dice: {dice}")
+
+            re_roll_indices = [i for i in range(len(dice)) if dice[i] not in fixed_values]
+
+            if not re_roll_indices:
+                print("No dice available for re-roll. Turn ends.")
+                score += calculate_score(dice)
+                break
+
+            print("You can only re-roll dice that are not fixed.")
+            for i in re_roll_indices:
+                if get_yes_no(f"Re-roll dice {i + 1} (current value: {dice[i]})? (y/n) ") == 'y':
+                    dice[i] = random.randint(1, 6)
+
+            print(f"Dice after re-roll: {dice}")
+            continue  
+        
         print("Do you want to re-roll any dice? (y/n)")
         if get_yes_no("") == 'n':
             score += calculate_score(dice)
@@ -76,16 +94,14 @@ def player_turn():
                 re_roll_dice.append(i)
 
         for i in re_roll_dice:
-            if 0 <= i < len(dice):
-                dice[i] = random.randint(1, 6)
+            dice[i] = random.randint(1, 6)
+
         print(f"Dice after re-roll: {dice}")
 
     return score
 
 def main():
     """
-    Manages the overall flow of the dice game.
-
     Prompts the user to enter the number of players, manages player turns,
     and determines the winner when a player reaches the target score.
 
