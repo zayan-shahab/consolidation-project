@@ -52,7 +52,7 @@ def player_turn():
     Returns player score
       """
     dice = roll_dice()
-    dice = list(dice)  
+    dice = list(dice)  # Convert tuple to list
     score = 0
 
     while True:
@@ -60,6 +60,7 @@ def player_turn():
             print("TUPLE OUT! You score 0 points.")
             break
 
+        # Identify fixed dice
         dice_counts = {value: dice.count(value) for value in set(dice)}
         fixed_values = [value for value, count in dice_counts.items() if count > 1]
 
@@ -75,13 +76,21 @@ def player_turn():
                 break
 
             print("You can only re-roll dice that are not fixed.")
+            re_rolled = False  # Track if the player re-rolled any dice
+
             for i in re_roll_indices:
                 if get_yes_no(f"Re-roll dice {i + 1} (current value: {dice[i]})? (y/n) ") == 'y':
                     dice[i] = random.randint(1, 6)
+                    re_rolled = True
 
             print(f"Dice after re-roll: {dice}")
-            continue  
-        
+            if not re_rolled:
+                # If no dice were re-rolled, calculate the score and end the turn
+                score += calculate_score(dice)
+                break
+            continue  # Continue the loop if dice were re-rolled
+
+        # Option to re-roll freely if no fixed dice
         print("Do you want to re-roll any dice? (y/n)")
         if get_yes_no("") == 'n':
             score += calculate_score(dice)
@@ -99,7 +108,6 @@ def player_turn():
         print(f"Dice after re-roll: {dice}")
 
     return score
-
 def main():
     """
     Prompts the user to enter the number of players, manages player turns,
