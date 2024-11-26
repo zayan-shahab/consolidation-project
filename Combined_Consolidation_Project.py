@@ -33,7 +33,7 @@ def calculate_score(dice):
     return sum(dice)
 
 def get_yes_no(prompt):
-     """
+    """
     Prompts the user for a yes or no response and validates the input.
     """
     while True:
