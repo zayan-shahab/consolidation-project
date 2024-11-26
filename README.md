@@ -36,3 +36,9 @@ A simple dice game for one or multiple players. The game involves rolling dice, 
    - If neither condition occurs, the player's score is the sum of the dice values.
 
 ---
+## How to Run
+
+1. Clone the repository or download the game script.
+2. Run the script using Python:
+   ```bash
+   python dice_game.py
