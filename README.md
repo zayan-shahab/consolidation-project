@@ -1,6 +1,6 @@
 # Dice Game
 
-A simple dice game for multiple players. The game involves rolling dice, making strategic decisions on re-rolls, and competing to achieve the highest score.
+A simple dice game for one or multiple players. The game involves rolling dice, making strategic decisions on re-rolls, and competing to achieve the highest score.
 
 ## Features
 - Supports multiple players.
